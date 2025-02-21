@@ -51,6 +51,7 @@ app.post("/add-name", async (req, res) => {
   }
 });
 
+//Patch Method
 app.patch("/update-name/:name", async (req, res) => {
   try{
     if (!dbCollection) return res.status(500).json({ error: "Database not connected" });
@@ -66,6 +67,7 @@ app.patch("/update-name/:name", async (req, res) => {
 
 });  
 
+//listen to the server
 app.listen(PORT, () => {
   console.log(`Server running on PORT: ${PORT} at http://localhost:${PORT}`);
 });
