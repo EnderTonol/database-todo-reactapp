@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Form,Input,Button, ButtonGroup } from "@heroui/react";
 
 function App() {
   const [name, setName] = useState("");
@@ -51,27 +52,47 @@ function App() {
     getData();
   }
 
+  async function handleDelete(name){
+    const res = await fetch(`http://localhost:5000/del/users/${name.name}`, {
+      method: "DELETE",
+      headers: { "Server": "method Deletion"},
+    });
+    const data = await res.json();
+    if(res.ok){
+      setIname("");
+      alert(data.message || data.error);
+      getData();
+    }
+    getData();
+    
+  }
+
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <input
+    <div className="w-full h-screen p-2">
+      <Form onSubmit={handleSubmit} className="flex flex-row items-center">
+        <Input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Enter Name"
+          label="Enter Name"
+          color="primary"
+          size="sm"
           required
         />
-        <button type="submit">Add User</button>
-      </form>
-
-      <div>
-        <ol>
+        <Button type="submit" variant="shadow" color="primary">Add User</Button>
+      </Form>
+      {(allN.length > 0)? (
+        <div className="p-2 mt-4 rounded-2xl bg-slate-400">
+        <ol className="flex flex-col gap-1">
           {allN.map((itm, index) => (
             <>
-            <li key={index}>{itm.name}<button onClick={()=>handleUpdate(itm)}>Update</button></li>
+            <li className="flex flex-row items-center w-full p-1 rounded-2xl bg-slate-200" key={index}><p className="grow">{itm.name}</p><ButtonGroup><Button color="warning" onPress={()=>handleUpdate(itm)}>Update</Button><Button color="danger" variant="shadow" onPress={()=>handleDelete(itm)}>Delete</Button></ButtonGroup></li>
             </>
           ))}
         </ol>
+      </div>) : (<h1>No Data Found By restfull API</h1>)
+      }
       </div>
     </>
   );

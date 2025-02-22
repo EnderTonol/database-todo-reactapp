@@ -67,6 +67,18 @@ app.patch("/update-name/:name", async (req, res) => {
 
 });  
 
+//Delete Method
+app.delete("/del/users/:name", (req,res)=>{
+  try{
+    if (!dbCollection) return res.status(500).json({ error: "Database not connected" });
+
+    dbCollection.deleteOne({ name: req.params.name });
+    res.status(201).json({ message: "Name deleted successfully" });
+  } catch(err){
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 //listen to the server
 app.listen(PORT, () => {
   console.log(`Server running on PORT: ${PORT} at http://localhost:${PORT}`);
